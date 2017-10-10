@@ -11,7 +11,10 @@
        (into {})))
 
 (defn ingest [format collect lines]
-  (let [parser (pancake/parse format)
+  (let [lines (if-let [skip (:skip format)]
+                (drop skip lines)
+                lines)
+        parser (pancake/parse format)
         validator (if-let [spec (:spec format)]
                     (validation/validate spec)
                     (let [specs (field-specs format)]
