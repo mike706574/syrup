@@ -1,6 +1,9 @@
 (ns syrup.core.parsing-test
-  (:require [syrup.core.alpha :as syrup]
-            [clojure.test :refer [are deftest is]]))
+  (:require [clojure.spec.test.alpha :as stest]
+            [clojure.test :refer [are deftest is]]
+            [syrup.core.alpha :as syrup]))
+
+(stest/instrument)
 
 (def delimited-no-header {:id "test-format"
                           :type "delimited"

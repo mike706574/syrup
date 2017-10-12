@@ -1,7 +1,10 @@
 (ns syrup.core.parsing-test
   (:require [clojure.spec.alpha :as s]
+            [clojure.spec.test.alpha :as stest]
             [clojure.test :refer [are deftest is]]
             [syrup.core.alpha :as syrup]))
+
+(stest/instrument)
 
 (defn minimum [x] (fn minimum [y] (>= y x)))
 
