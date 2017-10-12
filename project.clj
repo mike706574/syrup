@@ -5,8 +5,8 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/spec.alpha "0.1.134"]
-                 [fun.mike/pancake "0.0.12-SNAPSHOT"]
-                 [fun.mike/tailor "0.0.16-SNAPSHOT"]]
+                 [fun.mike/pancake "0.0.13"]
+                 [fun.mike/tailor "0.0.16"]]
   :profiles {:dev {:source-paths ["dev"]
                    :target-path "target/dev"
                    :dependencies [[org.clojure/clojure "1.9.0-beta2"]

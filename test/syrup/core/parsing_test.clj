@@ -1,4 +1,4 @@
-(ns syrup.core.alpha-test
+(ns syrup.core.parsing-test
   (:require [syrup.core.alpha :as syrup]
             [clojure.test :refer [are deftest is]]))
 

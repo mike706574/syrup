@@ -1,25 +1,17 @@
 (ns syrup.core.alpha
   (:require [pancake.core :as pancake]
+            [pancake.format :as format]
             [tailor.transform :as transform]
             [tailor.validation :as validation]))
-
-(defn field-specs
-  [format]
-  (->> (:fields format)
-       (filter :spec)
-       (map #(vector (:id %) (:spec %)))
-       (into {})))
 
 (defn ingest [format collect lines]
   (let [lines (if-let [skip (:skip format)]
                 (drop skip lines)
                 lines)
+        record-spec (:spec format)
+        field-specs (format/value-specs format)
         parser (pancake/parse format)
-        validator (if-let [spec (:spec format)]
-                    (validation/validate spec)
-                    (let [specs (field-specs format)]
-                      (when-not (empty? specs)
-                        (validation/validate-with-specs specs))))
+        validator (validation/conform record-spec field-specs)
         xf (if validator
              (comp parser validator)
              parser)]
