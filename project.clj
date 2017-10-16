@@ -1,4 +1,4 @@
-(defproject fun.mike/syrup-alpha "0.0.4"
+(defproject fun.mike/syrup-alpha "0.0.5-SNAPSHOT"
   :description "Flat file parsing and validation library."
   :url "https://github.com/mike706574/syrup"
   :license {:name "Eclipse Public License"
