@@ -7,17 +7,17 @@
             [tailor.transform :as transform]
             [tailor.validation :as validation]))
 
-(defn data-summary [position]
-  (str (util/boxed (str "Record #" (:data-index position)))
+(defn data-summary [record]
+  (str (util/boxed (str "Record #" (:data-index record)))
        "Raw data:\n\""
-       (:data-line position)
+       (:data-line record)
        "\"\n\nParsed data:\n"
-       (util/pretty (dissoc position :data-index :data-line :data-errors))))
+       (util/pretty (dissoc record :data-index :data-line :data-errors))))
 
-(defn invalid-summary [error-summary position]
-  (str (data-summary position)
+(defn invalid-summary [error-summary record]
+  (str (data-summary record)
        "\nErrors:\n"
-       (->> position
+       (->> record
             (:data-errors)
             (map error-summary)
             (distinct)
