@@ -2,7 +2,7 @@
   (:require [syrup.util.alpha :as util]))
 
 (defn parts
-  [{:keys [pred val via in] :as error}]
+  [{:keys [pred val bin] :as error}]
   (let [quot-val (str \" val \")
         key (last in)
         quot-key (str \" (name key) \")
