@@ -2,18 +2,18 @@
   (:require [syrup.util.alpha :as util]))
 
 (defn parts
-  [{:keys [pred val via in] :as problem}]
+  [{:keys [pred val via in] :as error}]
   (let [quot-val (str \" val \")
         key (last in)
         quot-key (str \" (name key) \")
         context (str quot-key " with value " quot-val)]
-    (merge problem {:quot-val quot-val
+    (merge error {:quot-val quot-val
                     :key key
                     :quot-key quot-key
                     :context context})))
 
-(defn generic-summary [problem]
-  (let [{:keys [pred via in quot-val key quot-key context]} (error-parts problem)]
+(defn generic-summary [error]
+  (let [{:keys [pred via in quot-val key quot-key context]} (parts error)]
     (cond
       (= via [:tailor/to-double]) (str "Numeric field " context " is not a valid number.")
       (= via [:tailor/to-basic-iso-date]) (str "Date field " context " is not a valid date.")
