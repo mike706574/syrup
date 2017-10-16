@@ -4,7 +4,8 @@
 (defn pred-name [pred]
   (cond (string? pred) pred
         (symbol? pred) (name pred)
-        (sequential? pred) (name (second pred))
+        (and (sequential? pred)
+             (= (first pred) 'clojure.spec.alpha/conformer)) (name (second pred))
         :else (str pred)))
 
 (defn boxed [s]
