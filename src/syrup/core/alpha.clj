@@ -1,5 +1,7 @@
 (ns syrup.core.alpha
-  (:require [pancake.core :as pancake]
+  (:require [clojure.spec.alpha :as s]
+            [clojure.java.io :as io]
+            [pancake.core :as pancake]
             [pancake.format :as format]
             [tailor.transform :as transform]
             [tailor.validation :as validation]))
@@ -11,7 +13,11 @@
         record-spec (:spec format)
         field-specs (format/value-specs format)
         parser (pancake/parse format)
-        validator (validation/conform record-spec field-specs)
+        validator (cond
+                    (and record-spec field-specs) (validation/conform-and-validate record-spec field-specs)
+                    record-spec (validation/validate record-spec)
+                    field-specs (validation/conform-and-validate any? field-specs)
+                    :else nil)
         xf (if validator
              (comp parser validator)
              parser)]

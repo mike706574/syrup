@@ -2,7 +2,8 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.spec.test.alpha :as stest]
             [clojure.test :refer [are deftest is]]
-            [syrup.core.alpha :as syrup]))
+            [syrup.core.alpha :as syrup]
+            [tailor.specs :refer :all]))
 
 (stest/instrument)
 
@@ -48,11 +49,11 @@
             :amount "14X",
             :data-errors
             [{:path [],
-               :pred '(clojure.spec.alpha/conformer tailor.specs/to-double),
-               :val "14X",
-               :via [:tailor/to-double],
-               :in [],
-               :key :amount}]}]}
+              :pred '(clojure.spec.alpha/conformer tailor.specs/to-double),
+              :val "14X",
+              :via [:tailor/to-double],
+              :in [],
+              :key :amount}]}]}
          (syrup/collect delimited ["AAA|14X"]))))
 
 (deftest amount-too-low
@@ -62,19 +63,19 @@
           :invalid-count 1,
           :error-tally
           #{{:key :amount,
-             :pred '(clojure.spec.alpha/conformer tailor.specs/to-double),
+             :pred '(clojure.core/fn [%] (clojure.core/> % 5.0)),
              :count 1}},
           :valid [],
           :invalid
           [{:data-index 0,
-            :data-line "AAA|14X",
+            :data-line "AAA|001",
             :id "AAA",
-            :amount "14X",
+            :amount 1.0,
             :data-errors
-            [{:path [],
-               :pred '(clojure.spec.alpha/conformer tailor.specs/to-double),
-               :val "14X",
-               :via [:tailor/to-double],
-               :in [],
-               :key :amount}]}]}
+            [{:path [:amount],
+              :pred '(clojure.core/fn [%] (clojure.core/> % 5.0)),
+              :val 1.0,
+              :via [:domain/item :domain/amount],
+              :in [:amount],
+              :key :amount}]}]}
          (syrup/collect delimited ["AAA|001"]))))

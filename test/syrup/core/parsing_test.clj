@@ -17,7 +17,7 @@
           :count 1,
           :valid-count 1,
           :invalid-count 0,
-          :error-tally {},
+          :error-tally #{},
           :valid
           [{:data-index 0, :data-line "AAA|015", :id "AAA", :amount "015"}],
           :invalid []}
@@ -36,7 +36,7 @@
           :count 1,
           :valid-count 1,
           :invalid-count 0,
-          :error-tally {},
+          :error-tally #{},
           :valid
           [{:data-index 0, :data-line "AAA|015", :id "AAA", :amount "015"}],
           :invalid []}
@@ -54,7 +54,7 @@
           :count 2,
           :valid-count 2,
           :invalid-count 0,
-          :error-tally {},
+          :error-tally #{},
           :valid
           [{:data-index 0, :data-line "AAA015", :id "AAA", :amount "015"}
            {:data-index 1, :data-line "BBB123", :id "BBB", :amount "123"}],
