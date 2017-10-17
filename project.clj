@@ -6,7 +6,7 @@
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/spec.alpha "0.1.134"]
                  [fun.mike/pancake "0.0.19"]
-                 [fun.mike/tailor "0.0.18"]]
+                 [fun.mike/tailor "0.0.19"]]
   :profiles {:dev {:source-paths ["dev"]
                    :target-path "target/dev"
                    :dependencies [[org.clojure/clojure "1.9.0-beta2"]

@@ -3,25 +3,29 @@
             [clojure.java.io :as io]
             [pancake.core :as pancake]
             [pancake.format :as format]
-            [tailor.transform :as transform]
+            [tailor.analysis :as analysis]
             [tailor.validation :as validation]))
 
-(defn ingest [format collect lines]
-  (let [lines (if-let [skip (:skip format)]
-                (drop skip lines)
-                lines)
-        record-spec (:spec format)
-        field-specs (format/value-specs format)
-        parser (pancake/parse format)
-        validator (cond
-                    (and record-spec field-specs) (validation/conform-and-validate record-spec field-specs)
-                    record-spec (validation/validate record-spec)
-                    field-specs (validation/conform-and-validate any? field-specs)
-                    :else nil)
-        xf (if validator
-             (comp parser validator)
-             parser)]
-    (collect xf lines)))
+(defn validator [format]
+  (let [record-spec (:spec format)
+        field-specs (format/value-specs format)]
+    (cond
+      (and record-spec field-specs) (validation/conform-and-validate record-spec field-specs)
+      record-spec (validation/validate record-spec)
+      field-specs (validation/conform-and-validate any? field-specs))))
 
-(defn validate [format lines] (ingest format transform/summarize lines))
-(defn collect [format lines] (ingest format transform/collect lines))
+(defn xform [format]
+  (let [dropper (when-let [skip (:skip format)]
+                  (drop skip))
+        parser (pancake/parse format)
+        validator (validator format)]
+    (apply comp (filter identity [dropper parser validator]))))
+
+(defn sequence
+  ([format lines]
+   (sequence (xform format) lines))
+  ([format xf lines]
+   (sequence (comp (xform format) xf) lines)))
+
+(defn collect [format lines]
+  (analysis/categorize-and-tally (xform format) lines))

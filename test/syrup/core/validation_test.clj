@@ -38,7 +38,8 @@
           :valid-count 0,
           :invalid-count 1,
           :error-tally
-          #{{:key :amount,
+          #{{:in [:amount], :pred 'clojure.core/double?, :count 1}
+            {:in [:amount],
              :pred '(clojure.spec.alpha/conformer tailor.specs/to-double),
              :count 1}},
           :valid [],
@@ -52,8 +53,12 @@
               :pred '(clojure.spec.alpha/conformer tailor.specs/to-double),
               :val "14X",
               :via [:tailor/to-double],
-              :in [],
-              :key :amount}]}]}
+              :in [:amount]}
+             {:path [:amount],
+              :pred 'clojure.core/double?,
+              :val "14X",
+              :via [:domain/item :domain/amount],
+              :in [:amount]}]}]}
          (syrup/collect delimited ["AAA|14X"]))))
 
 (deftest amount-too-low
@@ -62,7 +67,7 @@
           :valid-count 0,
           :invalid-count 1,
           :error-tally
-          #{{:key :amount,
+          #{{:in [:amount]
              :pred '(clojure.core/fn [%] (clojure.core/> % 5.0)),
              :count 1}},
           :valid [],
@@ -76,6 +81,5 @@
               :pred '(clojure.core/fn [%] (clojure.core/> % 5.0)),
               :val 1.0,
               :via [:domain/item :domain/amount],
-              :in [:amount],
-              :key :amount}]}]}
+              :in [:amount]}]}]}
          (syrup/collect delimited ["AAA|001"]))))
