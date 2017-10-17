@@ -1,6 +1,6 @@
 (ns syrup.core.alpha
-  (:require [clojure.spec.alpha :as s]
-            [clojure.java.io :as io]
+  (:refer-clojure :exclude [sequence])
+  (:require [clojure.core :as core]
             [pancake.core :as pancake]
             [pancake.format :as format]
             [tailor.analysis :as analysis]
@@ -23,9 +23,9 @@
 
 (defn sequence
   ([format lines]
-   (sequence (xform format) lines))
+   (core/sequence (xform format) lines))
   ([format xf lines]
-   (sequence (comp (xform format) xf) lines)))
+   (core/sequence (comp (xform format) xf) lines)))
 
 (defn collect [format lines]
   (analysis/categorize-and-tally (xform format) lines))

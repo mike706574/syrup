@@ -3,9 +3,7 @@
             [clojure.string :as str]
             [clojure.java.io :as io]
             [syrup.core.alpha :as core]
-            [syrup.util.alpha :as util]
-            [tailor.transform :as transform]
-            [tailor.validation :as validation]))
+            [syrup.util.alpha :as util]))
 
 (defn data-summary [record]
   (str (util/boxed (str "Record #" (:data-index record)))
