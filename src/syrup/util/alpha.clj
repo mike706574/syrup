@@ -1,11 +1,13 @@
 (ns syrup.util.alpha
-  (:require [clojure.pprint :as pprint]))
+  (:require [clojure.pprint :as pprint]
+            [clojure.spec.alpha :as s]))
 
 (defn pred-name [pred]
   (cond (string? pred) pred
         (symbol? pred) (name pred)
         (and (sequential? pred)
-             (= (first pred) 'clojure.spec.alpha/conformer)) (name (second pred))
+             (= (first pred) 'clojure.spec.alpha/conformer)) (pred-name (second pred))
+        (sequential? pred) (pr-str (s/abbrev pred))
         :else (str pred)))
 
 (defn boxed [s]

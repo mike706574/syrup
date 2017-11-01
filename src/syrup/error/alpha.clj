@@ -34,4 +34,4 @@
       (= pred `inst?) (str "Date field " context " is not a valid date.")
       :else (or (record-length-mismatch error)
                 (cell-count-mismatch error)
-                (str "Field " context " failed predicate \"" (util/pred-name pred) "\".")))))
+                (str "Field " context " failed predicate " (util/pred-name pred) ".")))))
