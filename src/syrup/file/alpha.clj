@@ -52,7 +52,7 @@
                                     (str "[" (last in) ", " (util/pred-name pred) "] " count)))
                              (str/join "\n"))
                         "\n\n"
-                        (->> all
+                        (->> items
                              (map (partial item-summary error-summary))
                              (str/join "\n\n"))))
           false))))
