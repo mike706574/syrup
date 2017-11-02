@@ -26,21 +26,20 @@
   (str (data-summary item)
        "\nValid!"))
 
-(defn either-summary [error-summary item]
+(defn item-summary [error-summary item]
   (if (:data-errors item)
     (invalid-summary error-summary item)
     (valid-summary item)))
 
 (defn validate [format error-summary path]
-  (let [{:keys [all valid? count
-                valid valid-count
-                invalid invalid-count
+  (let [{:keys [items valid? count
+                valid-count
+                invalid-count
                 data-errors-count format-error-count error-tally]
          :as result} (->> path
                           (io/reader)
                           (line-seq)
                           (core/collect format))]
-    (println (keys result))
     (if valid?
       (do (println (str "Parsed " count " items from file \"" path "\", all of which were valid."))
           true)
@@ -54,6 +53,6 @@
                              (str/join "\n"))
                         "\n\n"
                         (->> all
-                             (map (partial either-summary error-summary))
+                             (map (partial item-summary error-summary))
                              (str/join "\n\n"))))
           false))))

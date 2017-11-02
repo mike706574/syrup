@@ -3,15 +3,15 @@
   (:require [clojure.core :as core]
             [pancake.core :as pancake]
             [pancake.format :as format]
-            [tailor.tally :as tally]
-            [tailor.validation :as validation]))
+            [syrup.tally.alpha :as tally]
+            [syrup.validation.alpha :as validation]))
 
 (defn validator [format]
-  (let [record-spec (:spec format)
+  (let [item-spec (:spec format)
         field-specs (format/value-specs format)]
     (cond
-      (and record-spec field-specs) (validation/conform-and-validate record-spec field-specs)
-      record-spec (validation/validate record-spec)
+      (and item-spec field-specs) (validation/conform-and-validate item-spec field-specs)
+      item-spec (validation/validate item-spec)
       field-specs (validation/conform-and-validate any? field-specs))))
 
 (defn xform [format]
