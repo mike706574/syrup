@@ -3,7 +3,7 @@
   (:require [clojure.core :as core]
             [pancake.core :as pancake]
             [pancake.format :as format]
-            [tailor.analysis :as analysis]
+            [tailor.tally :as tally]
             [tailor.validation :as validation]))
 
 (defn validator [format]
@@ -28,4 +28,4 @@
    (core/sequence (comp (xform format) xf) lines)))
 
 (defn collect [format lines]
-  (analysis/categorize-and-tally (xform format) lines))
+  (tally/tally (xform format) lines))

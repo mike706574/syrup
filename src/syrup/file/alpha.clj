@@ -5,25 +5,34 @@
             [syrup.core.alpha :as core]
             [syrup.util.alpha :as util]))
 
-(defn data-summary [record]
-  (str (util/boxed (str "Record #" (:data-index record)))
+(defn data-summary [item]
+  (str (util/boxed (str "Item #" (inc (:data-index item))))
        "Raw data:\n\""
-       (:data-line record)
+       (:data-line item)
        "\"\n\nParsed data:\n"
-       (util/pretty (dissoc record :data-index :data-line :data-errors))))
+       (util/pretty (dissoc item :data-index :data-line :data-errors))))
 
-(defn invalid-summary [error-summary record]
-  (str (data-summary record)
+(defn invalid-summary [error-summary item]
+  (str (data-summary item)
        "\nErrors:\n"
-       (->> record
+       (->> item
             (:data-errors)
             (map error-summary)
             (distinct)
             (map #(str "  " %))
             (str/join "\n"))))
 
+(defn valid-summary [item]
+  (str (data-summary item)
+       "\nValid!"))
+
+(defn either-summary [error-summary item]
+  (if (:data-errors item)
+    (invalid-summary error-summary item)
+    (valid-summary item)))
+
 (defn validate [format error-summary path]
-  (let [{:keys [valid? count
+  (let [{:keys [all valid? count
                 valid valid-count
                 invalid invalid-count
                 data-errors-count format-error-count error-tally]
@@ -31,10 +40,11 @@
                           (io/reader)
                           (line-seq)
                           (core/collect format))]
+    (println (keys result))
     (if valid?
-      (do (println (str "Parsed " count " records from file \"" path "\", all of which were valid."))
+      (do (println (str "Parsed " count " items from file \"" path "\", all of which were valid."))
           true)
-      (do (println (str "Parsed " count " records from file \"" path "\" - " valid-count " valid, " invalid-count " invalid."
+      (do (println (str "Parsed " count " items from file \"" path "\" - " valid-count " valid, " invalid-count " invalid."
                         \newline
                         \newline
                         (util/boxed "Error Tally")
@@ -43,7 +53,7 @@
                                     (str "[" (last in) ", " (util/pred-name pred) "] " count)))
                              (str/join "\n"))
                         "\n\n"
-                        (->> invalid
-                             (map (partial invalid-summary error-summary))
+                        (->> all
+                             (map (partial either-summary error-summary))
                              (str/join "\n\n"))))
           false))))
